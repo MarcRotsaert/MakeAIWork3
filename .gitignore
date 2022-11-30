@@ -109,8 +109,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-miw3
-
+miw3/
+env_miw3/
+gradio_env/
+env_geopan/
 # Spyder project settings
 .spyderproject
 .spyproject

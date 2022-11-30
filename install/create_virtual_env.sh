@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-virtualEnvName="miw3"
+virtualEnvName="env_miw3"
 
 function createVirtualEnv {    
     if [[ -d "" ]]
