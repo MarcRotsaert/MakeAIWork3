@@ -141,3 +141,4 @@ opdrachten/practica/*/.ipynb_checkpoints
 MNIST
 *.gz
 *.zip
+*.json
