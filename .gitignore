@@ -111,6 +111,7 @@ env.bak/
 venv.bak/
 miw3/
 env_miw3/
+env_gues/
 gradio_env/
 env_geopan/
 # Spyder project settings
