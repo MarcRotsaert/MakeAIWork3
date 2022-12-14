@@ -143,3 +143,5 @@ MNIST
 *.gz
 *.zip
 *.json
+
+*.jpg
