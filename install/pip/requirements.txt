@@ -27,3 +27,5 @@ tensorflow_datasets
 tensorflow_hub
 transformers
 widgetsnbextension
+cookiecutter
+beautifulsoup4
