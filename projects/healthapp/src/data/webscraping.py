@@ -4,7 +4,7 @@
 # import selenium
 from __init__ import *
 
-xx
+# xx
 import pprint
 from selenium import webdriver as wd
 import bs4
@@ -86,6 +86,14 @@ def seleniumtest():
     print(len(x.value_of_css_property("h1")))
     # dir(By)
     # wd_inst.find_element_by_xpath
+
+
+def webscrape():
+    blob = scraping()
+    tit, data = decode(blob)
+    df = data2df(tit, data)
+    # print(df)
+    return df
 
 
 def main():

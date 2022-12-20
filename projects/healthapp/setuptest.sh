@@ -1,4 +1,4 @@
-
+#!/bin/sh
 PYTHON_ENV="env_miw3"
 echo $PYTHON_ENV
 echo $VIRTUAL_ENV
@@ -11,4 +11,6 @@ else
 source ~/MakeAIWork3/env_miw3/Scripts/activate
 fi
 
+python ~/MakeAIWork3/projects/healthapp/src/main.py
+echo "Finished"
 # python setup install
