@@ -3,6 +3,7 @@ import sqlite3 as sql
 # import webscraping as ws
 import os
 import numpy as np
+import pandas as pd
 
 # df = ws.webscrape()
 
@@ -38,7 +39,8 @@ class Sqlite:
             self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
             ex = self.connection.execute("select * from " + self.tablename + ";")
             print("query")
-            return ex.fetchall()
+            data = np.array(ex.fetchall()).flatten()
+            return
         else:
             print("non-query")
             pass
@@ -51,10 +53,10 @@ class Sqlite:
                 "select " + colname + " from " + self.tablename + ";"
             )
             print("query")
-            return ex.fetchall()
+            return np.array(ex.fetchall()).flatten()
         else:
             print("non-query")
-            pass
+            # pass
         self.close_connection()
 
     def add_patient2sql(self, data):
@@ -62,15 +64,25 @@ class Sqlite:
         # con = sql.connect(os.path.join(datapath, dbname + '.db"))
         # self.close_connection()
 
-def sqldata2df(sqldata,colnames):
 
+def sqldata2df(queriedata, colnames):
+    try:
+        df = pd.DataFrame(queriedata, columns=colnames)
+    except ValueError:
+        df = pd.DataFrame(queriedata, columns=colnames)
+
+    # arr_l = np.array(res_length).flatten() / 100
+    # arr_w = np.array(res_weight).flatten()
+    return df
 
 
 if __name__ == "__main__":
     inst_sql = Sqlite("healthapp", "health")
     res_length = inst_sql.get_datafromcolumn("length")
     res_weight = inst_sql.get_datafromcolumn("mass")
-    arr_l = np.array(res_length).flatten() / 100
-    arr_w = np.array(res_weight).flatten()
-    arr_bmi = arr_w / (arr_l**2)
-    print(arr_bmi)
+    df = sqldata2df(np.array([res_weight, res_length]).T, ["weight", "length"])
+    print(df)
+    # arr_l = np.array(res_length).flatten() / 100
+    # arr_w = np.array(res_weight).flatten()
+    # arr_bmi = arr_w / (arr_l**2)
+    # print(arr_bmi)
