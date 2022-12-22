@@ -35,6 +35,18 @@ class Sqlite:
         # con.close()
         self.close_connection()
 
+    def get_colnames(self):
+        self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+        # ex = self.connection.execute("PRAGMA table_info(" + self.tablename + ");")
+        # select name from pragma_table_info("health")
+        ex = self.connection.execute(
+            """select name from pragma_table_info(\"""" + self.tablename + """\")"""
+        )
+        temp = ex.fetchall()
+        colnames = [t[0] for t in temp]
+        self.close_connection()
+        return colnames
+
     def get_data(self):
         if self.exists_db():
             self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
@@ -85,7 +97,7 @@ class Sqlite:
 
         return sql_statement1  # , sql_statement2
 
-    def add_values2col(self, colname, values):
+    def set_values2col(self, colname, values):
         # add values, beginning at first row going down
         self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
 
@@ -118,10 +130,10 @@ def sqldata2df(queriedata, colnames):
     return df
 
 
-def dbdata2df(columnnames):
+def dbdata2df(colnames):
     inst_sql = Sqlite("healthapp", "health")
     temp = []
-    for cname in columnnames:
+    for cname in colnames:
         temp.append(inst_sql.get_datafromcolumn(cname))
     df = sqldata2df(np.array(temp).T, colnames)
     return df
@@ -129,13 +141,14 @@ def dbdata2df(columnnames):
 
 if __name__ == "__main__":
     inst_sql = Sqlite("healthapp", "health")
+    colnames = inst_sql.get_colnames()
+
+    xx
     # a = inst_sql.add_column2sql("bmi","DOUBLE")
-    # a= inst_sql.add_values2col('bmi',[1],2,3])
-    a = inst_sql.add_values2col("bmi", [1, 2, 3])
-    # a = inst_sql.add_values2col('bmi',[2,2,2]])
+    # a = inst_sql.set_values2col('bmi',[2,2,2]])
     print(inst_sql.get_datafromcolumn("bmi"))
     # print(b)
-    xx
+    # xx
     res_length = inst_sql.get_datafromcolumn("length")
     res_weight = inst_sql.get_datafromcolumn("mass")
     df = sqldata2df(np.array([res_weight, res_length]).T, ["weight", "length"])

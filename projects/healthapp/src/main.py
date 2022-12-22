@@ -19,26 +19,37 @@ from matplotlib import pyplot as pp
 # print(modelspath)
 print(os.getcwd())
 
+
 if False:
-    # webscraping tests
+    # WEBSCRAPING TESTS
     blob = scrape.scraping()
     tit, data = scrape.decode(blob)
     df = scrape.data2df(tit, data)
 
 if False:
-    # van website, naar dataframe, naar pickle bestand.
+    # VAN WEBSITE, NAAR DATAFRAME, NAAR PICKLE BESTAND.
     md.make_basistraindf()
+
+if True:
+    # AANVULLEN VAN SQLDB MET KOLOM BMI,
+    # EN DEZE VULLEN MET WAARDEN
+    df = md.open_basistraindf()
+    pp_data = md.Preprocess(df)
+    df_new = pp_data.set_bmi()
+
+    inst_sql = db.Sqlite("healthapp", "health")
+    inst_sql.add_values2col("bmi", df_new["bmi"])
 
 if False:
     df = md.open_basistraindf()
     print(df)
 
 if False:
-    # plotten plots beschrijvende statistiek
+    # PLOTTEN PLOTS BESCHRIJVENDE STATISTIEK
     vi.Descrstats().descr_main()
 
 if True:
-    # preprocess voor model
+    # PREPROCESS VOOR MODEL
     # xparam = ["alcohol", "exercise", "bmi", "sugar", "smoking"]
     xparam = ["exercise", "bmi"]
     df = md.open_basistraindf()
@@ -47,21 +58,11 @@ if True:
     prepro.set_bmi()
     print(df.get(xparam).shape)
     test, train = prepro.split_data()
-    # dtree = tm.Modeltrainer(xparam=xparam).decisiontree(
-    #    test, printmetrics=True
-    # )
-
     dtree = tm.Modeltrainer(xparam=xparam).decisiontree(train, printmetrics=True)
 
-    # res = dtree.decision_path(df)
     pred_train = pm.Modelpredictor(dtree).predictor(train, xparam)
     print(pred_train)
-    # vi.Descrstats().plot_xygraph(pred,)
 
     vi.Descrstats().plot_xygraph(pred_train, "true", "pred")
     pp.gcf().savefig("C:/temp/proj3_res.png")
     # print(dir(dtree))
-
-if False:
-    db.dbdata2dfxparam = ["alcohol", "exercise", "bmi", "sugar", "smoking"])
-    df = scrape.webscrape()

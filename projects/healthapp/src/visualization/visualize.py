@@ -2,8 +2,9 @@ import os
 from matplotlib import pyplot as pp
 import time
 from __init__ import *
+import data.webscraping as ws
 
-# import database as dbase
+import data.database as db
 
 
 class Descrstats:
@@ -61,10 +62,11 @@ if __name__ == "__main__":
 
     # from  .... import data.webscraping as scrape
     # try:
-    df = ws.webscrape()
+    md
+    df = db.dbdata2df()
     # except ConnectionError:
     # pass
-    Descrstats().plot_xygraph(df, "exercise", "lifespan")
+    Descrstats().plot_xygraph(df, "smoking", "lifespan")
     pp.gcf().savefig(os.path.join(datapath, "xy_ex2ls.png"))
     for k in df.keys():
         Descrstats().plot_distribution(df, k, 7)

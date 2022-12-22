@@ -12,19 +12,19 @@ import pandas as pd
 
 from __init__ import *
 
-# print(datapath)
+
 # print(ws)
 # xx
 
 
-def make_basistraindf():
+def make_basistraindf(datapath):
     # Sla de gegevens van de website op in een dataframe.
     # Deze gegevens zijn onbewerkt
     df = ws.webscrape()
     df.to_pickle(os.path.join(datapath, "raw", "df_train_basis.pickle"))
 
 
-def open_basistraindf():
+def open_basistraindf(datapath):
     with open(os.path.join(datapath, "raw", "df_train_basis.pickle"), "rb") as g:
         # df = pickle.load(os.path.join(datapath, "raw", "df_train_basis.pickle"))
         df = pickle.load(g)
