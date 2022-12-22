@@ -5,6 +5,7 @@ import os
 import numpy as np
 import pandas as pd
 
+
 # df = ws.webscrape()
 
 datapath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
@@ -64,6 +65,47 @@ class Sqlite:
         # con = sql.connect(os.path.join(datapath, dbname + '.db"))
         # self.close_connection()
 
+    def add_column2sql(self, colname, coldata, datatype):
+        # add column 2 table
+        # datatype : str, example. DOUBLE, or TEXT  ]
+        col_def = colname + " " + datatype
+        sql_statement1 = (
+            """ALTER TABLE """
+            + self.tablename
+            + """
+        ADD """
+            + colname
+            + """ """
+            + col_def
+            + """;"""
+        )
+        self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+        ex = self.connection.execute(sql_statement1)
+        self.close_connection()
+
+        return sql_statement1  # , sql_statement2
+
+    def add_values2col(self, colname, values):
+        # add values, beginning at first row going down
+        self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+
+        for ix, val in enumerate(values):
+            valstring = str(round(val, 1))
+            sql_statement2 = (
+                """UPDATE """
+                + self.tablename
+                + """ SET """
+                + colname
+                + """ = """
+                + valstring
+                # + """3.0"""
+                + """ WHERE rowid = """
+                + str(ix + 1)
+            )
+            ex2 = self.connection.execute(sql_statement2)
+        self.connection.commit()
+        self.close_connection()
+
 
 def sqldata2df(queriedata, colnames):
     try:
@@ -76,8 +118,24 @@ def sqldata2df(queriedata, colnames):
     return df
 
 
+def dbdata2df(columnnames):
+    inst_sql = Sqlite("healthapp", "health")
+    temp = []
+    for cname in columnnames:
+        temp.append(inst_sql.get_datafromcolumn(cname))
+    df = sqldata2df(np.array(temp).T, colnames)
+    return df
+
+
 if __name__ == "__main__":
     inst_sql = Sqlite("healthapp", "health")
+    # a = inst_sql.add_column2sql("bmi","DOUBLE")
+    # a= inst_sql.add_values2col('bmi',[1],2,3])
+    a = inst_sql.add_values2col("bmi", [1, 2, 3])
+    # a = inst_sql.add_values2col('bmi',[2,2,2]])
+    print(inst_sql.get_datafromcolumn("bmi"))
+    # print(b)
+    xx
     res_length = inst_sql.get_datafromcolumn("length")
     res_weight = inst_sql.get_datafromcolumn("mass")
     df = sqldata2df(np.array([res_weight, res_length]).T, ["weight", "length"])
