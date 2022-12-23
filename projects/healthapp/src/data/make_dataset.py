@@ -51,7 +51,7 @@ class Preprocess:
         return self.df
 
     def split_data(self):
-        train, test = modsel.train_test_split(self.df, test_size=0.1, random_state=123)
+        train, test = modsel.train_test_split(self.df, test_size=0.15, random_state=123)
         return test, train
         # pass
 
