@@ -65,7 +65,7 @@ class Sqlite:
             ex = self.connection.execute(
                 "select " + colname + " from " + self.tablename + ";"
             )
-            print("query")
+            # print("query")
             return np.array(ex.fetchall()).flatten()
         else:
             print("non-query")
