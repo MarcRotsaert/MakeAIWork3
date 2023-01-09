@@ -5,28 +5,27 @@ import os
 import numpy as np
 import pandas as pd
 
-
 # df = ws.webscrape()
 
 datapath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
 
 
 class Sqlite:
-    def __init__(self, dbname, tablename):
+    def __init__(self, dbname: str, tablename: str):
         self.dbname = dbname
         self.tablename = tablename
         self.exists_db()
         self.connection = None
 
-    def exists_db(self):
+    def exists_db(self) -> bool:
         # res = os.path.exists(os.path.join(datapath, dbname + ".db"))
         return os.path.exists(os.path.join(datapath, self.dbname + ".db"))
 
-    def close_connection(self):
+    def close_connection(self) -> None:
         if self.connection != None:
             self.connection.close()
 
-    def make_newsqldb(self, df, dbname):
+    def make_newsqldb(self, df: pd.DataFrame, dbname: str) -> None:
         # Make sqlite database uit dataframe.
         # Dataframe is afkomstig uit
         self.connection = sql.connect(os.path.join(datapath, dbname + ".db"))
@@ -35,7 +34,7 @@ class Sqlite:
         # con.close()
         self.close_connection()
 
-    def get_colnames(self):
+    def get_colnames(self) -> list:
         self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
         # ex = self.connection.execute("PRAGMA table_info(" + self.tablename + ");")
         # select name from pragma_table_info("health")
@@ -143,7 +142,7 @@ if __name__ == "__main__":
     inst_sql = Sqlite("healthapp", "health")
     colnames = inst_sql.get_colnames()
 
-    xx
+    # xx
     # a = inst_sql.add_column2sql("bmi","DOUBLE")
     # a = inst_sql.set_values2col('bmi',[2,2,2]])
     print(inst_sql.get_datafromcolumn("bmi"))
