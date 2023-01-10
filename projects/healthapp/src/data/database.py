@@ -4,22 +4,24 @@ import sqlite3 as sql
 import os
 import numpy as np
 import pandas as pd
+from __init__ import *
 
 # df = ws.webscrape()
 
-datapath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
+# databasepath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
 
 
 class Sqlite:
-    def __init__(self, dbname: str, tablename: str):
+    def __init__(self, databasepath, dbname: str, tablename: str):
+        self.dbpath = databasepath
         self.dbname = dbname
         self.tablename = tablename
         self.exists_db()
         self.connection = None
 
     def exists_db(self) -> bool:
-        # res = os.path.exists(os.path.join(datapath, dbname + ".db"))
-        return os.path.exists(os.path.join(datapath, self.dbname + ".db"))
+        # res = os.path.exists(os.path.join(databasepath, dbname + ".db"))
+        return os.path.exists(os.path.join(self.dbpath, self.dbname + ".db"))
 
     def close_connection(self) -> None:
         if self.connection != None:
@@ -28,14 +30,14 @@ class Sqlite:
     def make_newsqldb(self, df: pd.DataFrame, dbname: str) -> None:
         # Make sqlite database uit dataframe.
         # Dataframe is afkomstig uit
-        self.connection = sql.connect(os.path.join(datapath, dbname + ".db"))
+        self.connection = sql.connect(os.path.join(self.dbpath, dbname + ".db"))
         tablename = dbname
         df.to_sql(tablename, self.connection)
         # con.close()
         self.close_connection()
 
     def get_colnames(self) -> list:
-        self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+        self.connection = sql.connect(os.path.join(self.dbpath, self.dbname + ".db"))
         # ex = self.connection.execute("PRAGMA table_info(" + self.tablename + ");")
         # select name from pragma_table_info("health")
         ex = self.connection.execute(
@@ -48,7 +50,9 @@ class Sqlite:
 
     def get_data(self):
         if self.exists_db():
-            self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+            self.connection = sql.connect(
+                os.path.join(self.dbpath, self.dbname + ".db")
+            )
             ex = self.connection.execute("select * from " + self.tablename + ";")
             print("query")
             data = np.array(ex.fetchall())
@@ -63,7 +67,9 @@ class Sqlite:
 
     def get_datafromcolumn(self, colname) -> np.ndarray:
         if self.exists_db():
-            self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+            self.connection = sql.connect(
+                os.path.join(self.dbpath, self.dbname + ".db")
+            )
             ex = self.connection.execute(
                 "select " + colname + " from " + self.tablename + ";"
             )
@@ -76,7 +82,7 @@ class Sqlite:
 
     def add_patient2sql(self, data):
         pass
-        # con = sql.connect(os.path.join(datapath, dbname + '.db"))
+        # con = sql.connect(os.path.join(self.dbpath, dbname + '.db"))
         # self.close_connection()
 
     def add_column2sql(self, colname, coldata, datatype):
@@ -93,7 +99,7 @@ class Sqlite:
             + col_def
             + """;"""
         )
-        self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+        self.connection = sql.connect(os.path.join(self.dbpath, self.dbname + ".db"))
         ex = self.connection.execute(sql_statement1)
         self.close_connection()
 
@@ -101,7 +107,7 @@ class Sqlite:
 
     def set_values2col(self, colname, values):
         # add values, beginning at first row going down
-        self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
+        self.connection = sql.connect(os.path.join(self.dbpath, self.dbname + ".db"))
 
         for ix, val in enumerate(values):
             valstring = str(round(val, 1))
@@ -132,9 +138,13 @@ def sqldata2df(queriedata, colnames):
     return df
 
 
-def dbdata2df(colnames):
+def dbdata2df(colnames=None):
     inst_sql = Sqlite("healthapp", "health")
     temp = []
+    if colnames == None:
+        colnames = inst_sql.get_colnames()
+        if "index" in colnames:
+            colnames.remove("index")
     for cname in colnames:
         temp.append(inst_sql.get_datafromcolumn(cname))
     df = sqldata2df(np.array(temp).T, colnames)
@@ -142,7 +152,9 @@ def dbdata2df(colnames):
 
 
 if __name__ == "__main__":
-    inst_sql = Sqlite("healthapp", "health")
+
+    databasepath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
+    inst_sql = Sqlite(databasepath, "healthapp", "health")
     colnames = inst_sql.get_colnames()
     data1 = inst_sql.get_datafromcolumn(colnames[1])
     data2 = inst_sql.get_data()

@@ -6,7 +6,7 @@ import numpy as np
 class HappDbExistance(unittest.TestCase):
     def setUp(self):
         # print(dir(self))
-        self.sql = db.Sqlite("healthapp", "health")
+        self.sql = db.Sqlite(databasepath, "healthapp", "health")
 
     def test_methoddbdata2df(self):
         self.assertTrue(getattr(db, "dbdata2df", False))
@@ -17,7 +17,7 @@ class HappDbExistance(unittest.TestCase):
 
 class HappDbMethod(unittest.TestCase):
     def setUp(self):
-        self.sql = db.Sqlite("healthapp", "health")
+        self.sql = db.Sqlite(databasepath, "healthapp", "health")
 
     def test_type_get_colnames(self):
         self.assertEqual(type(self.sql.get_colnames()), list)
@@ -38,5 +38,6 @@ if __name__ == "__main__":
     # print(unittest.getTestCaseNames(Existancetest, "test"))
     # print(unittest.counts(Existancetest, "test"))
     # Existancetest
+    databasepath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
     unittest.main()
     # Importtest.importtest()
