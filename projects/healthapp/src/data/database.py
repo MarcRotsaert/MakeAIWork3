@@ -51,14 +51,17 @@ class Sqlite:
             self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
             ex = self.connection.execute("select * from " + self.tablename + ";")
             print("query")
-            data = np.array(ex.fetchall()).flatten()
-            return
+            data = np.array(ex.fetchall())
+            colnames = self.get_colnames()
+
+            self.close_connection()
+            return colnames, data
         else:
             print("non-query")
+            self.close_connection()
             pass
-        self.close_connection()
 
-    def get_datafromcolumn(self, colname):
+    def get_datafromcolumn(self, colname) -> np.ndarray:
         if self.exists_db():
             self.connection = sql.connect(os.path.join(datapath, self.dbname + ".db"))
             ex = self.connection.execute(
@@ -66,10 +69,10 @@ class Sqlite:
             )
             # print("query")
             return np.array(ex.fetchall()).flatten()
+            self.close_connection()
         else:
             print("non-query")
             # pass
-        self.close_connection()
 
     def add_patient2sql(self, data):
         pass
@@ -141,11 +144,13 @@ def dbdata2df(colnames):
 if __name__ == "__main__":
     inst_sql = Sqlite("healthapp", "health")
     colnames = inst_sql.get_colnames()
-
+    data1 = inst_sql.get_datafromcolumn(colnames[1])
+    data2 = inst_sql.get_data()
     # xx
     # a = inst_sql.add_column2sql("bmi","DOUBLE")
     # a = inst_sql.set_values2col('bmi',[2,2,2]])
     print(inst_sql.get_datafromcolumn("bmi"))
+    print(inst_sql.get_data())
     # print(b)
     # xx
     res_length = inst_sql.get_datafromcolumn("length")

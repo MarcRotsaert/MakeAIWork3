@@ -1,5 +1,6 @@
 import unittest
 import database as db
+import numpy as np
 
 
 class HappDbExistance(unittest.TestCase):
@@ -21,24 +22,15 @@ class HappDbMethod(unittest.TestCase):
     def test_type_get_colnames(self):
         self.assertEqual(type(self.sql.get_colnames()), list)
 
+    def test_type_get_datafromcolumn(self):
+        colnames = self.sql.get_colnames()
+        for cname in colnames[1:]:
+            self.assertIsInstance(self.sql.get_datafromcolumn(cname), np.ndarray)
 
-# class Valuetest
-
-
-# class TestStringMethods(unittest.TestCase):
-#     def test_upper(self):
-#         self.assertEqual("foo".upper(), "FOO")
-
-#     def test_isupper(self):
-#         self.assertTrue("FOO".isupper())
-#         self.assertFalse("Foo".isupper())
-
-# def test_split(self):
-#     s = "hello world"
-#     self.assertEqual(s.split(), ["hello", "world"])
-#     # check that s.split fails when the separator is not a string
-#     with self.assertRaises(TypeError):
-#         s.split(2)
+    def test_type_get_data(self):
+        self.assertEqual(len(self.sql.get_data()), 2)
+        self.assertIsInstance(self.sql.get_data()[0], list)
+        self.assertIsInstance(self.sql.get_data()[1], np.ndarray)
 
 
 if __name__ == "__main__":
