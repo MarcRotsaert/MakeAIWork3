@@ -138,16 +138,10 @@ def sqldata2df(queriedata, colnames):
     return df
 
 
-def dbdata2df(colnames=None):
-    inst_sql = Sqlite("healthapp", "health")
-    temp = []
-    if colnames == None:
-        colnames = inst_sql.get_colnames()
-        if "index" in colnames:
-            colnames.remove("index")
-    for cname in colnames:
-        temp.append(inst_sql.get_datafromcolumn(cname))
-    df = sqldata2df(np.array(temp).T, colnames)
+def dbdata2df(databasepath, dbname, tablename):
+    inst_sql = Sqlite(databasepath, dbname, tablename)
+    dbdata = inst_sql.get_data()
+    df = sqldata2df(dbdata[1], dbdata[0])
     return df
 
 

@@ -18,13 +18,40 @@ from matplotlib import pyplot as pp
 # print(srcpath)
 # print(modelspath)
 print(os.getcwd())
+import numpy as np
+
+
+# def dbdata2df(colnames=None):
+#     inst_sql = db.Sqlite(databasepath, "healthapp", "health")
+#     temp = []
+#     if colnames == None:
+#         colnames = inst_sql.get_colnames()
+#         if "index" in colnames:
+#             colnames.remove("index")
+#     for cname in colnames:
+#         temp.append(inst_sql.get_datafromcolumn(cname))
+#     df = db.sqldata2df(np.array(temp).T, colnames)
+#     return df
 
 
 if True:
     # modelpredictor
-    model = tm.make_appmodel()
-    pm.Modelpredictor(model)
 
+    df = db.dbdata2df(databasepath, "healthapp", "health")
+    inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
+    outputparam = "lifespan"
+
+    model = tm.Modeltrainer(inputparam, outputparam).linearregr(df)
+    predictor = pm.Modelpredictor(model)
+
+    # return model
+
+    # model = tm.make_appmodel()
+    # predictor = pm.Modelpredictor(model)
+
+    res = predictor.predict(df[inputparam])
+    diff = df["lifespan"] - res
+    # x
 
 if False:
     # WEBSCRAPING TESTS
@@ -36,7 +63,7 @@ if False:
     # VAN WEBSITE, NAAR DATAFRAME, NAAR PICKLE BESTAND.
     md.make_basistraindf()
 
-if True:
+if False:
     # AANVULLEN VAN SQLDB MET KOLOM BMI,
     # EN DEZE VULLEN MET WAARDEN
     df = md.open_basistraindf()
@@ -54,7 +81,7 @@ if False:
     # PLOTTEN PLOTS BESCHRIJVENDE STATISTIEK
     vi.Descrstats().descr_main()
 
-if True:
+if False:
     # PREPROCESS VOOR MODEL
     # xparam = ["alcohol", "exercise", "bmi", "sugar", "smoking"]
     xparam = ["exercise", "bmi"]
