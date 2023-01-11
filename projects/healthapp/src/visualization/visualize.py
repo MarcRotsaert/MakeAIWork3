@@ -2,9 +2,10 @@ import os
 from matplotlib import pyplot as pp
 import time
 from __init__ import *
-import data.webscraping as ws
 
-import data.database as db
+# import data.webscraping as ws
+
+# import data.database as db
 
 
 class Descrstats:
@@ -44,7 +45,7 @@ class Descrstats:
         pp.title(colname)
 
     def descr_main(self):
-        import data.webscraping as ws
+        # import data.webscraping as ws
         import data.make_dataset as md
         import visualization.visualize as vs
 
@@ -58,16 +59,24 @@ class Descrstats:
 
 
 if __name__ == "__main__":
+    import sys
+
+    sys.path.append(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
     os.chdir(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
+
+    import data.database as db
 
     # from  .... import data.webscraping as scrape
     # try:
-    md
-    df = db.dbdata2df()
+    databasepath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
+    df = db.dbdata2df(databasepath, "healthapp", "health")
+
     # except ConnectionError:
     # pass
+    datapath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\reports\figures"
     Descrstats().plot_xygraph(df, "smoking", "lifespan")
     pp.gcf().savefig(os.path.join(datapath, "xy_ex2ls.png"))
     for k in df.keys():
         Descrstats().plot_distribution(df, k, 7)
         pp.gcf().savefig(os.path.join(datapath, "distr_" + k + ".png"))
+        pp.close()
