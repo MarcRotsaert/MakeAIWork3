@@ -2,6 +2,24 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Question
 from django.template import loader
+import json
+import sys
+
+import os
+
+sys.path.append(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
+
+import models.predict_model as pm
+import models.train_model as tm
+import data.database as db
+
+os.chdir(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
+from __init__ import *
+
+os.chdir(r"C:\Users\marcr\MakeAIWork3")
+
+# os.chdir(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
+# import data.database
 
 
 def index(request):
@@ -37,6 +55,52 @@ def results(request, question_id):
 
 def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
+
+
+def healthapp_intro(
+    request,
+):
+    print("")
+    context = {"linkactivate": "lala"}
+    return render(request, r"healtapp.html", context)
+
+
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def calc(request):
+    # print(os.environ["PYTHONPATH"])
+    print(databasepath)
+    print(os.getcwd())
+
+    json_body = json.loads(request.body)
+    print(json_body)
+    # print(type(request.body))
+    # print(request.POST)
+    alc = json_body["alcohol"]
+    print(alc)
+    xx
+
+    df = db.dbdata2df(databasepath, "healthapp", "health")
+    inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
+    outputparam = "lifespan"
+
+    trainer = tm.Modeltrainer(inputparam, outputparam)
+    appmodel = trainer.linearregr(df)
+    predictor = pm.Modelpredictor(appmodel)
+    # args = [6 * request.body]
+    # args[0] =
+    print(predictor.return_featuresin())
+    print(args)
+    val = int(predictor.predict(args))
+
+    print(val)
+    # print(db.databasepath)
+    # print(request.body)
+    # result = int(request.body) * 2
+    # print(result)
+    return HttpResponse(val)
 
 
 # Create your views here.

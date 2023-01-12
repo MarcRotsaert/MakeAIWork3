@@ -1,0 +1,50 @@
+
+<h1><strong> The Health app</strong></h1>
+<p><input type="text" value=60 id="in_gen">genetic</input></p>
+<p><input type="text" value=4 id="in_exe">exercise</input></p>
+<p><input type="text" value=0 id="in_smo">smoking</input></p>
+<p><input type="text" value=5 id="in_alc">alcohol</input></p>
+<p><input type="text" value=3 id="in_sug">sugar</input></p>
+<p><input type="text" value=30 id="in_bmi">bmi</input>
+</p>
+  <!-- <body> -->
+    <!-- <div contenteditable="False",id="ladiela"> -->
+      <!-- This text can be edited by . -->
+    <!-- </div> -->
+  <!-- </body> -->
+
+<p><button color="black" id="out_button">druk deze knop</button></p>
+<div id="out_val">ladiela</div>
+
+<script>
+btn=document.getElementById("out_button");
+out_val= document.getElementById("out_val");
+<!-- out_val= document.getElementById("ladiela"); -->
+
+btn.addEventListener("click", (event) => {
+	
+	data= {genetic:document.getElementById("in_gen").value,
+			alcohol:document.getElementById("in_alc").value
+	};
+	
+	input = document.getElementById("in_gen").value,document.getElementById("in_alc").value	;
+
+	fetch("/polls/calc",  {
+			credentials: "include",
+			method:"POST",
+			body:JSON.stringify(data)})
+		.then((response)=>response.text())
+		.then((responsetext)=> {
+			out_val.textContent = responsetext;
+		})
+		.catch((error) => {console.error('Error:',error)});
+});
+</script>
+
+{% if linkactivate %}
+	<ul><a href="/polls/happ/linkactivate">linkactivate</a></ul>
+{% else %}
+    <p>No links available.</p>
+{% endif %}
+
+
