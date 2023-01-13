@@ -78,24 +78,31 @@ def calc(request):
     print(json_body)
     # print(type(request.body))
     # print(request.POST)
-    alc = json_body["alcohol"]
-    print(alc)
-    xx
+    # alc = json_body["alcohol"]
+    # print(alc)
+    # xx
 
     df = db.dbdata2df(databasepath, "healthapp", "health")
     inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
     outputparam = "lifespan"
-
     trainer = tm.Modeltrainer(inputparam, outputparam)
+
     appmodel = trainer.linearregr(df)
     predictor = pm.Modelpredictor(appmodel)
+    # inputparam = predictor.return_featuresin()
+    input_val = []
+    for par in inputparam:
+        input_val.append(float(json_body[par]))
     # args = [6 * request.body]
     # args[0] =
-    print(predictor.return_featuresin())
-    print(args)
-    val = int(predictor.predict(args))
+    val = predictor.predict([input_val])
 
-    print(val)
+    val = "{:.3}".format(val[0])
+    # print(val)
+    # print(predictor.return_featuresin())
+    # print(args)
+    # val = int(predictor.predict(args))
+
     # print(db.databasepath)
     # print(request.body)
     # result = int(request.body) * 2
