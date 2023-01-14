@@ -17,10 +17,10 @@ from __init__ import *
 # xx
 
 
-def make_basistraindf(datapath):
+def make_basistraindf(datapath, url):
     # Sla de gegevens van de website op in een dataframe.
     # Deze gegevens zijn onbewerkt
-    df = ws.webscrape()
+    df = ws.webscrape(url)
     df.to_pickle(os.path.join(datapath, "raw", "df_train_basis.pickle"))
 
 

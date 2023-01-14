@@ -1,5 +1,6 @@
 import sys, os
 
+import data.webscraping as scrape
 
 apppath = "projects\healthapp"
 srcpath = os.path.join(apppath, "src")

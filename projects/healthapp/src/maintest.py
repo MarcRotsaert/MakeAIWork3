@@ -2,7 +2,6 @@ import os
 
 print(os.getcwd())
 
-
 from __init__ import *
 
 import data.webscraping as scrape
@@ -33,8 +32,29 @@ import numpy as np
 #     df = db.sqldata2df(np.array(temp).T, colnames)
 #     return df
 
+if False:
+    # WEBSCRAPING TESTS
+    blob = scrape.scraping()
+    tit, data = scrape.decode(blob)
+    df = scrape.data2df(tit, data)
 
 if True:
+    df = db.dbdata2df("C:/temp", "healthapp", "health")
+    inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
+    outputparam = "lifespan"
+    model = tm.Modeltrainer(inputparam, outputparam).linearregr(df)
+    predictor = pm.Modelpredictor(model)
+
+    # return model
+
+    # model = tm.make_appmodel()
+    # predictor = pm.Modelpredictor(model)
+
+    res = predictor.predict(df[inputparam])
+    diff = df["lifespan"] - res
+    print(diff)
+
+if False:
     # modelpredictor
 
     df = db.dbdata2df(databasepath, "healthapp", "health")

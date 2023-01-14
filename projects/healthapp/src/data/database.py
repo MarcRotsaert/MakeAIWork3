@@ -16,7 +16,7 @@ class Sqlite:
         self.dbpath = databasepath
         self.dbname = dbname
         self.tablename = tablename
-        self.exists_db()
+        # self.exists_db()
         self.connection = None
 
     def exists_db(self) -> bool:
@@ -26,6 +26,9 @@ class Sqlite:
     def close_connection(self) -> None:
         if self.connection != None:
             self.connection.close()
+
+    def copy_sqldb(self, dbname):
+        self.connection = sql.connect(os.path.join(self.dbpath, dbname + ".db"))
 
     def make_newsqldb(self, df: pd.DataFrame, dbname: str) -> None:
         # Make sqlite database uit dataframe.
@@ -80,8 +83,42 @@ class Sqlite:
             print("non-query")
             # pass
 
-    def add_patient2sql(self, data):
-        pass
+    def add_patient2sql(self, df):
+
+        if self.exists_db():
+            self.connection = sql.connect(
+                os.path.join(self.dbpath, self.dbname + ".db")
+            )
+
+            colstr = ""
+            for col in df.columns:
+                colstr += col + ", "
+            print(colstr)
+
+            for d in df.iloc:
+                dstr = ""
+                for colname in df.columns:
+                    dstr += str(d[colname]) + ", "
+                    # print(dstr)
+
+                execstr = (
+                    "INSERT INTO "
+                    + self.tablename
+                    + " ( "
+                    + colstr[:-2]
+                    + " ) VALUES ( "
+                    + dstr[:-2]
+                    + " );"
+                )
+
+                print(execstr)
+                ex = self.connection.execute(execstr)
+            self.connection.commit()
+            self.close_connection()
+        else:
+            print("non-existant db")
+
+        # pass
         # con = sql.connect(os.path.join(self.dbpath, dbname + '.db"))
         # self.close_connection()
 
@@ -140,30 +177,52 @@ def sqldata2df(queriedata, colnames):
 
 def dbdata2df(databasepath, dbname, tablename):
     inst_sql = Sqlite(databasepath, dbname, tablename)
-    dbdata = inst_sql.get_data()
     df = sqldata2df(dbdata[1], dbdata[0])
     return df
 
 
-if __name__ == "__main__":
+def updatesql(databasepath, dbname, tablename, dfnew):
+    # Update sql database met nieuwe data uit
+    inst_sql = Sqlite(databasepath, dbname, tablename)
 
+    if "index" in dfnew:
+        dfnew.drop(columns="index")
+    sql_coltest = inst_sql.get_colnames()
+    sql_coltest.remove("index")
+    assert sql_coltest == dfnew.columns.to_list()
+    lendfnew = dfnew.shape[0]
+    dbdata = inst_sql.get_data()
+    lendb = dbdata[1].shape[0]
+    newdata = dfnew.iloc[lendb:]
+    inst_sql.add_patient2sql(newdata)
+    print(newdata)
+    print("yippieyajeeee")
+
+    # df = sqldata2df(dbdata[1], dbdata[0])
+
+    # dbdata = inst_sql.get_data()
+
+
+if __name__ == "__main__":
     databasepath = r"C:\Users\marcr\MakeAIWork3\projects\healthapp\data\external"
     inst_sql = Sqlite(databasepath, "healthapp", "health")
-    colnames = inst_sql.get_colnames()
-    data1 = inst_sql.get_datafromcolumn(colnames[1])
-    data2 = inst_sql.get_data()
-    # xx
-    # a = inst_sql.add_column2sql("bmi","DOUBLE")
-    # a = inst_sql.set_values2col('bmi',[2,2,2]])
-    print(inst_sql.get_datafromcolumn("bmi"))
-    print(inst_sql.get_data())
-    # print(b)
-    # xx
-    res_length = inst_sql.get_datafromcolumn("length")
-    res_weight = inst_sql.get_datafromcolumn("mass")
-    df = sqldata2df(np.array([res_weight, res_length]).T, ["weight", "length"])
-    print(df)
-    # arr_l = np.array(res_length).flatten() / 100
-    # arr_w = np.array(res_weight).flatten()
-    # arr_bmi = arr_w / (arr_l**2)
-    # print(arr_bmi)
+
+    if False:
+        colnames = inst_sql.get_colnames()
+        data1 = inst_sql.get_datafromcolumn(colnames[1])
+        data2 = inst_sql.get_data()
+        print(inst_sql.get_datafromcolumn("bmi"))
+        print(inst_sql.get_data())
+        res_length = inst_sql.get_datafromcolumn("length")
+        res_weight = inst_sql.get_datafromcolumn("mass")
+        df = sqldata2df(np.array([res_weight, res_length]).T, ["weight", "length"])
+        print(df)
+
+    # conn = sql.connect("C:/temp/testdb.db")
+    df = dbdata2df(databasepath, "healthapp", "health")
+    df = df.drop(columns="index")
+    dfnew = df.iloc[-3:]
+    if False:
+        df.to_sql("test", conn)
+    inst_sql_test = Sqlite("C:/temp", "healthapp", "health")
+    inst_sql_test.add_patient2sql(dfnew)

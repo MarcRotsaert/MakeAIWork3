@@ -12,9 +12,9 @@ import pandas as pd
 import requests
 
 
-def scraping():
+def scraping(url):
     # inlezen van de tekst website met requests,werkt wel vaak.
-    req = requests.get(url="https://medisch-centrum-randstad.netlify.app/")
+    req = requests.get(url=url)
     x2 = bs4.BeautifulSoup(req.content)
     return x2
 
@@ -97,7 +97,7 @@ def webscrape():
 
 
 def main():
-    scrape_res = scraping()
+    scrape_res = scraping("https://medisch-centrum-randstad.netlify.app/")
     titles, data = decode(scrape_res)
     df = data2df(titles, data)
     return df
@@ -105,3 +105,9 @@ def main():
 
 if __name__ == "__main__":
     df = main()
+    scrape_extra = scraping("https://medisch-centrum-randstad.netlify.app/")
+    titles_ex, data_ex = decode(scrape_extra)
+    df_ex = data2df(titles_ex, data_ex)
+    titles_ex, data_ex = decode(scrape_extra)
+    df_ex = data2df(titles_ex, data_ex)
+    print(df_ex)

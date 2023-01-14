@@ -20,17 +20,29 @@ from matplotlib import pyplot as pp
 print(os.getcwd())
 
 
-if False:
-    # WEBSCRAPING TESTS
-    blob = scrape.scraping()
+def dbupdate():
+    # Update db with newly scraped data.
+    url = "https://medisch-centrum-randstad.netlify.app/"
+    blob = scrape.scraping(url)
     tit, data = scrape.decode(blob)
-    df = scrape.data2df(tit, data)
+    dfraw = scrape.data2df(tit, data)
+    pp_data = md.Preprocess(dfraw)
+    dfnew = pp_data.set_bmi()
+
+    db.updatesql(databasepath, "healthapp", "health", dfnew)
+
+
+if True:
+    # update database
+    dbupdate()
+
 
 if False:
     # VAN WEBSITE, NAAR DATAFRAME, NAAR PICKLE BESTAND.
     md.make_basistraindf()
 
-if True:
+
+if False:
     # AANVULLEN VAN SQLDB MET KOLOM BMI,
     # EN DEZE VULLEN MET WAARDEN
     df = md.open_basistraindf()
@@ -44,11 +56,13 @@ if False:
     df = md.open_basistraindf()
     print(df)
 
+
 if False:
     # PLOTTEN PLOTS BESCHRIJVENDE STATISTIEK
     vi.Descrstats().descr_main()
 
-if True:
+
+if False:
     # PREPROCESS VOOR MODEL
     # xparam = ["alcohol", "exercise", "bmi", "sugar", "smoking"]
     xparam = ["exercise", "bmi"]
@@ -66,3 +80,7 @@ if True:
     vi.Descrstats().plot_xygraph(pred_train, "true", "pred")
     pp.gcf().savefig("C:/temp/proj3_res.png")
     # print(dir(dtree))
+
+
+if __name__ == "__main__":
+    pass
