@@ -38,6 +38,11 @@ if False:
     tit, data = scrape.decode(blob)
     df = scrape.data2df(tit, data)
 
+if False:
+    # VAN WEBSITE, NAAR DATAFRAME, NAAR PICKLE BESTAND.
+    md.make_basistraindf()
+
+
 if True:
     df = db.dbdata2df("C:/temp", "healthapp", "health")
     inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
@@ -53,6 +58,18 @@ if True:
     res = predictor.predict(df[inputparam])
     diff = df["lifespan"] - res
     print(diff)
+
+
+if False:
+    # AANVULLEN VAN SQLDB MET KOLOM BMI,
+    # EN DEZE VULLEN MET WAARDEN
+    df = md.open_basistraindf()
+    pp_data = md.Preprocess(df)
+    df_new = pp_data.set_bmi()
+
+    inst_sql = db.Sqlite("healthapp", "health")
+    inst_sql.add_values2col("bmi", df_new["bmi"])
+
 
 if False:
     # modelpredictor
@@ -98,10 +115,6 @@ if False:
     print(df)
 
 if False:
-    # PLOTTEN PLOTS BESCHRIJVENDE STATISTIEK
-    vi.Descrstats().descr_main()
-
-if False:
     # PREPROCESS VOOR MODEL
     # xparam = ["alcohol", "exercise", "bmi", "sugar", "smoking"]
     xparam = ["exercise", "bmi"]
@@ -119,3 +132,7 @@ if False:
     vi.Descrstats().plot_xygraph(pred_train, "true", "pred")
     pp.gcf().savefig("C:/temp/proj3_res.png")
     # print(dir(dtree))
+
+if False:
+    # PLOTTEN PLOTS BESCHRIJVENDE STATISTIEK
+    vi.Descrstats().descr_main()

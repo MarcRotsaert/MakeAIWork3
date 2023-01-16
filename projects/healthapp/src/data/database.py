@@ -177,6 +177,7 @@ def sqldata2df(queriedata, colnames):
 
 def dbdata2df(databasepath, dbname, tablename):
     inst_sql = Sqlite(databasepath, dbname, tablename)
+    dbdata = inst_sql.get_data()
     df = sqldata2df(dbdata[1], dbdata[0])
     return df
 
@@ -194,13 +195,9 @@ def updatesql(databasepath, dbname, tablename, dfnew):
     dbdata = inst_sql.get_data()
     lendb = dbdata[1].shape[0]
     newdata = dfnew.iloc[lendb:]
+    # print(newdata)
     inst_sql.add_patient2sql(newdata)
-    print(newdata)
-    print("yippieyajeeee")
-
-    # df = sqldata2df(dbdata[1], dbdata[0])
-
-    # dbdata = inst_sql.get_data()
+    # print("yippieyajeeee")
 
 
 if __name__ == "__main__":
