@@ -16,8 +16,10 @@ class Sqlite:
         self.dbpath = databasepath
         self.dbname = dbname
         self.tablename = tablename
-        # self.exists_db()
+
         self.connection = None
+        if not self.exists_db():
+            print(os.getcwd())
 
     def exists_db(self) -> bool:
         # res = os.path.exists(os.path.join(databasepath, dbname + ".db"))

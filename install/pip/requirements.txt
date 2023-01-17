@@ -30,3 +30,4 @@ widgetsnbextension
 cookiecutter
 beautifulsoup4
 django
+schedule

@@ -13,17 +13,18 @@ import models.train_model as tm
 import models.predict_model as pm
 from matplotlib import pyplot as pp
 import pprint
+import time
+import schedule
 
 # xx
-# print(datapath)
 # print(srcpath)
-# print(modelspath)
 print(os.getcwd())
 
 
 def dbupdate():
     # Update db with newly scraped data.
-    print(dbname)
+    # print(os.getcwd())
+    # print(dbname)
     blob = scrape.scraping(url)
     tit, data = scrape.decode(blob)
     dfraw = scrape.data2df(tit, data)
@@ -54,18 +55,14 @@ if __name__ == "__main__":
     dbname = "healthapp"
     tablename = "health"
 
-    # print(os.environ.keys())
-    # dbupdate()
+    os.chdir("../../..")
     if sys.argv[1] == "UPDATE":
+        schedule.every(1).day.do(dbupdate)
+        while True:
+            schedule.run_pending()
+            # time.sleep(1)
+
         # path = os.environ["HOME"]
-        os.chdir("../../..")
-        print(os.getcwd())
-        # xx
-        dbupdate()
-    # print("nodieno")
     if sys.argv[1] == "PREDICT":
         print("yes")
-        # makedescrstats()
-
-    make_prediction()
-    # pass
+        # make_prediction()
