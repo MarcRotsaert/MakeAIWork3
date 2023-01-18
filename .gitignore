@@ -148,3 +148,4 @@ MNIST
 
 deliverable
 projects/healthapp/src/django/myfirstdjango/storage/database.py
+projects/healthapp/src/django/myfirstdjango/nohup.out
