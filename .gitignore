@@ -147,3 +147,4 @@ MNIST
 *.jpg
 
 deliverable
+projects/healthapp/src/django/myfirstdjango/storage/database.py
