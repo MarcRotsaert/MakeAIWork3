@@ -2,7 +2,5 @@
 
 port=8080
 
-(cd django/myfirstdjango; nohup python manage.py runserver ${port} &)
-sleep 7
-python -m webbrowser -t "http://localhost:${port}/polls/happ" 
-
+python django/myfirstdjango/manage.py migrate
+nohup python django/myfirstdjango/manage.py runserver ${port}

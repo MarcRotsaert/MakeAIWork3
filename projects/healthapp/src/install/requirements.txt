@@ -2,5 +2,4 @@ django
 numpy
 pandas
 scipy
-sklearn
-pysqlite3
+scikit-learn

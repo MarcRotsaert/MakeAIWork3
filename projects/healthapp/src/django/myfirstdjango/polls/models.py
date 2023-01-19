@@ -1,12 +1,11 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+import logging
 
-
-# from models.predict_model import predictor
+logging.basicConfig(level="DEBUG")
 
 # Create your models here.
-
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)

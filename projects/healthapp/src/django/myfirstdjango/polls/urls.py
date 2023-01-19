@@ -1,5 +1,9 @@
 from django.urls import path
 from .views import index, index2, healthapp_intro, detail, results, vote, crazyfrog, calc
+import logging
+
+logging.basicConfig(level="DEBUG")
+
 urlpatterns = [
     path("", index, name="index"),
     path("index2/", index2, name="index2"),
