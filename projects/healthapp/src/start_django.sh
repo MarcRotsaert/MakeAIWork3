@@ -1,5 +1,6 @@
-echo "yes"
-python django/myfirstdjango/manage.py runserver &
-sleep 10
-start msedge.exe http://localhost:8000/polls/happ
+#!/usr/bin/env bash
 
+port=8080
+
+python django/myfirstdjango/manage.py migrate
+nohup python django/myfirstdjango/manage.py runserver ${port}

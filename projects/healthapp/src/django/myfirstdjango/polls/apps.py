@@ -1,4 +1,7 @@
 from django.apps import AppConfig
+import logging
+
+logging.basicConfig(level="DEBUG")
 
 
 class PollsConfig(AppConfig):

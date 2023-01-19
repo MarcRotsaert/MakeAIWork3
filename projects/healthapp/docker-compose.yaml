@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  django:
+    build: .
+    image: marc/healthapp:latest
+    ports:
+      - "8080:8080"
