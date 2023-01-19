@@ -1,24 +1,28 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Question
+# from models import Question
 from django.template import loader
 import json
+import logging
 import sys
-
 import os
-
-sys.path.append(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
-
-import models.predict_model as pm
+from models.predict_model import Modelpredictor
+from .models import Question
 import models.train_model as tm
-import data.database as db
+import storage.database as db
 
-os.chdir(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
-from __init__ import *
+logging.basicConfig(level="DEBUG")
 
-os.chdir(r"C:\Users\marcr\MakeAIWork3")
+# sys.path.append(r"/src")
 
-# os.chdir(r"C:\Users\marcr\MakeAIWork3\projects\healthapp\src")
+
+logging.debug(f"current directory : {os.getcwd()}")
+# os.chdir(r"/src ")
+# from __init__ import *
+
+# os.chdir(r"../../../")
+
+# os.chdir(r"/src\src")
 # import data.database
 
 
@@ -88,7 +92,7 @@ def calc(request):
     trainer = tm.Modeltrainer(inputparam, outputparam)
 
     appmodel = trainer.linearregr(df)
-    predictor = pm.Modelpredictor(appmodel)
+    predictor = Modelpredictor(appmodel)
     # inputparam = predictor.return_featuresin()
     input_val = []
     for par in inputparam:
