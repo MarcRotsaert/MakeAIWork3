@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
 # from models import Question
 from django.template import loader
 import json
@@ -75,8 +76,8 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def calc(request):
     # print(os.environ["PYTHONPATH"])
-    print(databasepath)
     print(os.getcwd())
+    # print(databasepath)
 
     json_body = json.loads(request.body)
     print(json_body)
@@ -85,7 +86,11 @@ def calc(request):
     # alc = json_body["alcohol"]
     # print(alc)
     # xx
+    # Hier moet nog iets voor gevonden worden.
+    # Een configuratiefile met paden e.d.?
 
+    # databasepath = "projects\healthapp\data\external"
+    databasepath = "/mnt/data"
     df = db.dbdata2df(databasepath, "healthapp", "health")
     inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
     outputparam = "lifespan"

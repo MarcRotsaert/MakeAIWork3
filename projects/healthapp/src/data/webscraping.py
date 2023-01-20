@@ -6,7 +6,7 @@ from __init__ import *
 
 # xx
 import pprint
-from selenium import webdriver as wd
+from selenium import webdriver as wdwd
 import bs4
 import pandas as pd
 import requests

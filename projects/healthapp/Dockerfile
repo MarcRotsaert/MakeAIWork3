@@ -7,6 +7,8 @@ ENV DJANGO_SETTINGS_MODULE="myfirstdjango.settings"
 
 # Copy sources
 ADD src /app
+ADD ../data /mnt/data
+
 
 # Install Pyton libraries
 RUN python -m pip install --no-cache-dir -r /app/install/requirements.txt 
@@ -17,4 +19,8 @@ WORKDIR /app
 # Expose Django port
 EXPOSE 8080
 
-ENTRYPOINT ["python", "django/myfirstdjango/manage.py", "runserver", "0.0.0.0:8080"]
+ENTRYPOINT ["python", "django/myfirstdjango/manage.py", "runserver", "0.0.0.0:8080"]ed docker scripts for django
+
+
+AUTOLINKS
+0 found
