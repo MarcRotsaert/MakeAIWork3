@@ -86,11 +86,12 @@ def calc(request):
     # alc = json_body["alcohol"]
     # print(alc)
     # xx
-    # Hier moet nog iets voor gevonden worden.
-    # Een configuratiefile met paden e.d.?
 
     # databasepath = "projects\healthapp\data\external"
     databasepath = "/mnt/data"
+    # Hier moet nog iets voor gevonden worden.
+    # Een configuratiefile met paden e.d.?
+
     df = db.dbdata2df(databasepath, "healthapp", "health")
     inputparam = ["genetic", "exercise", "smoking", "alcohol", "sugar", "bmi"]
     outputparam = "lifespan"
