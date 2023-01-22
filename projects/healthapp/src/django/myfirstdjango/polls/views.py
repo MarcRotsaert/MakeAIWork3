@@ -88,7 +88,7 @@ def calc(request):
     # xx
 
     # databasepath = "projects\healthapp\data\external"
-    databasepath = "/mnt/data"
+    databasepath = "/mnt/data/external"
     # Hier moet nog iets voor gevonden worden.
     # Een configuratiefile met paden e.d.?
 

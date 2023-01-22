@@ -19,8 +19,5 @@ WORKDIR /app
 # Expose Django port
 EXPOSE 8080
 
-ENTRYPOINT ["python", "django/myfirstdjango/manage.py", "runserver", "0.0.0.0:8080"]ed docker scripts for django
+ENTRYPOINT ["python", "django/myfirstdjango/manage.py", "runserver", "0.0.0.0:8080"]
 
-
-AUTOLINKS
-0 found
