@@ -23,7 +23,8 @@ containerName="python-ai-neo"
 composePath="docker/compose"
 composefile="${composePath}/python-ai-neo.yaml"
 
-cmd="${prefix}docker/compose/up.sh ${composefile}"
+cmd="docker/compose/up.sh ${composefile}"
+#cmd="${prefix}docker/compose/up.sh ${composefile}"
 
 printf "%s cmd : \n\t%s\n\n" "$0" "${cmd}"
 eval ${cmd}
